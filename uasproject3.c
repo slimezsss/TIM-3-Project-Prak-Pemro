@@ -347,4 +347,68 @@ void kembalikanAlat() {
                 // Mengembalikan alat sesuai jumlah yang dipinjam
                 alatLab[index].jumlahTersedia += riwayatPeminjaman[i].jumlah_peminjaman;
                 simpanAlat(); // Simpan status setelah pengembalian
+                printf("Alat berhasil dikembalikan.\n"); 
+                
+                // Hapus riwayat peminjaman yang sudah dikembalikan
+                hapusPeminjamanDariRiwayat(id, riwayatPeminjaman[i].username_peminjam);
+                return;
+            }
+        }
+    } else {
+        printf("Alat dengan ID %u tidak ditemukan.\n", id);
+    }
+}
+
+int main() {
+    bacaAkun();
+    bacaAlat();
+    bacaPeminjaman();
+
+    int pilihLogin;
+    printf("Masukkan pilihan login (1 - Admin, 2 - User): ");
+    scanf("%d", &pilihLogin);
+
+    int akunIndex = login();
+    if (akunIndex == -1) {
+        printf("Login gagal.\n");
+        return 0;
+    }
+
+    printf("Login berhasil!\n");
+
+    if (pilihLogin == 1) { // Admin
+        while (1) {
+            int pilih;
+            printf("Menu Admin:\n");
+            printf("1. Tambah alat\n2. Lihat alat\n3. Hapus alat\n4. Edit alat\n5. Keluar\n");
+            printf("Pilih menu: ");
+            scanf("%d", &pilih);
+            switch (pilih) {
+                case 1: tambahAlat(); break;
+                case 2: lihatAlat(); break;
+                case 3: hapusAlat(); break;
+                case 4: editAlat(); break;
+                case 5: printf("Keluar dari sistem...\n"); return 0;
+                default: printf("Pilihan tidak valid.\n"); break;
+            }
+        }
+    } else if (pilihLogin == 2) { // User
+        while (1) {
+            int pilih;
+            printf("Menu User:\n");
+            printf("1. Lihat alat\n2. Pinjam alat\n3. Kembalikan alat\n4. Keluar\n");
+            printf("Pilih menu: ");
+            scanf("%d", &pilih);
+            switch (pilih) {
+                case 1: lihatAlat(); break;
+                case 2: pinjamAlat(); break;
+                case 3: kembalikanAlat(); break;
+                case 4: printf("Keluar dari sistem...\n"); return 0;
+                default: printf("Pilihan tidak valid.\n"); break;
+            }
+        }
+    }
+
+    return 0;
+} 
 
