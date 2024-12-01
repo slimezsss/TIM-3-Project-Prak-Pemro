@@ -137,3 +137,73 @@ void hapusPeminjamanDariRiwayat(unsigned int id_alat, const char* username) {
         // Geser elemen untuk menghapus entri
         for (int i = index_hapus; i < jumlahRiwayatPeminjaman - 1; i++) {
             riwayatPeminjaman[i] = riwayatPeminjaman[i + 1];
+}
+        jumlahRiwayatPeminjaman--;
+        simpanPeminjaman();
+    }
+}
+
+// Fungsi untuk melihat riwayat peminjaman
+void lihatRiwayatPeminjaman() {
+    printf("Riwayat Peminjaman:\n");
+    printf("ID Alat | Nama Alat | Username Peminjam | Jumlah Peminjaman\n");
+    printf("-----------------------------------------------------------\n");
+    for (int i = 0; i < jumlahRiwayatPeminjaman; i++) {
+        printf("%u | %s | %s | %u\n", 
+            riwayatPeminjaman[i].id_alat,
+            riwayatPeminjaman[i].nama_alat,
+            riwayatPeminjaman[i].username_peminjam,
+            riwayatPeminjaman[i].jumlah_peminjaman);
+    }
+}
+
+// Fungsi untuk login
+int login() {
+    char username[50], password[50];
+    printf("Masukkan username: ");
+    scanf("%s", username);
+    printf("Masukkan password: ");
+    scanf("%s", password);
+
+    for (int i = 0; i < jumlahAkun; i++) {
+        if (strcmp(username, akun[i].username) == 0 && strcmp(password, akun[i].password) == 0) {
+            return i; // Mengembalikan index akun yang berhasil login
+        }
+    }
+    return -1; // Login gagal
+}
+
+// Fungsi untuk menambah alat oleh admin
+void tambahAlat() {
+    if (jumlahAlat >= MAX_ALAT) {
+        printf("Jumlah alat mencapai batas maksimum.\n");
+        return;
+    }
+
+    AlatLab alat;
+    printf("Masukkan ID alat: ");
+    scanf("%u", &alat.id);
+    printf("Masukkan nama alat: ");
+    getchar(); // Membersihkan newline
+    fgets(alat.nama, sizeof(alat.nama), stdin);
+    alat.nama[strcspn(alat.nama, "\n")] = '\0'; // Menghapus newline
+    printf("Masukkan merek alat: ");
+    fgets(alat.merek, sizeof(alat.merek), stdin);
+    alat.merek[strcspn(alat.merek, "\n")] = '\0'; // Menghapus newline
+    printf("Masukkan model alat: ");
+    fgets(alat.model, sizeof(alat.model), stdin);
+    alat.model[strcspn(alat.model, "\n")] = '\0'; // Menghapus newline
+    printf("Masukkan tahun produksi: ");
+    scanf("%u", &alat.tahunProduksi);
+    printf("Masukkan jumlah unit: ");
+    scanf("%u", &alat.jumlahUnit);
+
+    alat.jumlahTersedia = alat.jumlahUnit;
+    alatLab[jumlahAlat] = alat;
+    jumlahAlat++;
+    simpanAlat(); // Simpan data alat yang baru ditambahkan ke file
+    printf("Alat berhasil ditambahkan.\n");
+}
+
+// Fungsi untuk menghapus alat oleh admin
+void hapusAlat() {
