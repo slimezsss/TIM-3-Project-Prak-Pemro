@@ -207,8 +207,7 @@ void tambahAlat() {
 
 // Fungsi untuk menghapus alat oleh admin
 void hapusAlat() {
-
-unsigned int id;
+    unsigned int id;
     printf("Masukkan ID alat yang ingin dihapus: ");
     scanf("%u", &id);
 
@@ -278,3 +277,74 @@ void editAlat() {
 void lihatAlat() {
     printf("Daftar alat yang tersedia:\n");
     for (int i = 0; i < jumlahAlat; i++) {
+     printf("ID: %u, Nama: %s, Merek: %s, Model: %s, Tahun: %u, Jumlah: %u, Tersedia: %u\n",
+                alatLab[i].id, alatLab[i].nama, alatLab[i].merek, alatLab[i].model,
+                alatLab[i].tahunProduksi, alatLab[i].jumlahUnit, alatLab[i].jumlahTersedia);
+    }
+}
+
+// Fungsi untuk meminjam alat
+void pinjamAlat() {
+    unsigned int id;
+    printf("Masukkan ID alat yang ingin dipinjam: ");
+    scanf("%u", &id);
+
+    int index = -1;
+    for (int i = 0; i < jumlahAlat; i++) {
+        if (alatLab[i].id == id) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index != -1) {
+        unsigned int jumlahPeminjaman;
+        printf("Masukkan jumlah alat yang ingin dipinjam: ");
+        scanf("%u", &jumlahPeminjaman);
+
+        if (jumlahPeminjaman <= alatLab[index].jumlahTersedia) {
+            alatLab[index].jumlahTersedia -= jumlahPeminjaman;
+            simpanAlat(); // Simpan status setelah peminjaman
+            printf("Alat berhasil dipinjam.\n");
+
+            // Menambahkan peminjaman ke riwayat
+            Peminjaman peminjaman_baru;
+            peminjaman_baru.id_alat = alatLab[index].id;
+            strcpy(peminjaman_baru.nama_alat, alatLab[index].nama);
+            printf("Masukkan username peminjam: ");
+            scanf("%s", peminjaman_baru.username_peminjam);
+
+            peminjaman_baru.jumlah_peminjaman = jumlahPeminjaman; // Menyimpan jumlah peminjaman
+
+            riwayatPeminjaman[jumlahRiwayatPeminjaman++] = peminjaman_baru;
+            simpanPeminjaman();  // Menyimpan peminjaman ke file
+        } else {
+            printf("Alat tidak tersedia dalam jumlah yang cukup.\n");
+        }
+    } else {
+        printf("Alat dengan ID %u tidak ditemukan.\n", id);
+    }
+}
+
+// Fungsi untuk mengembalikan alat
+void kembalikanAlat() {
+    unsigned int id;
+    printf("Masukkan ID alat yang ingin dikembalikan: ");
+    scanf("%u", &id);
+
+    int index = -1;
+    for (int i = 0; i < jumlahAlat; i++) {
+        if (alatLab[i].id == id) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index != -1) {
+        // Cari peminjaman berdasarkan alat yang dikembalikan
+        for (int i = 0; i < jumlahRiwayatPeminjaman; i++) {
+            if (riwayatPeminjaman[i].id_alat == id) {
+                // Mengembalikan alat sesuai jumlah yang dipinjam
+                alatLab[index].jumlahTersedia += riwayatPeminjaman[i].jumlah_peminjaman;
+                simpanAlat(); // Simpan status setelah pengembalian
+
