@@ -207,3 +207,74 @@ void tambahAlat() {
 
 // Fungsi untuk menghapus alat oleh admin
 void hapusAlat() {
+
+unsigned int id;
+    printf("Masukkan ID alat yang ingin dihapus: ");
+    scanf("%u", &id);
+
+    int index = -1;
+    for (int i = 0; i < jumlahAlat; i++) {
+        if (alatLab[i].id == id) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index != -1) {
+        for (int i = index; i < jumlahAlat - 1; i++) {
+            alatLab[i] = alatLab[i + 1];
+        }
+        jumlahAlat--;
+        simpanAlat(); // Simpan data setelah penghapusan
+        printf("Alat berhasil dihapus.\n");
+    } else {
+        printf("Alat dengan ID %u tidak ditemukan.\n", id);
+    }
+}
+
+// Fungsi untuk mengedit alat oleh admin
+void editAlat() {
+    unsigned int id;
+    printf("Masukkan ID alat yang ingin diedit: ");
+    scanf("%u", &id);
+
+    int index = -1;
+    for (int i = 0; i < jumlahAlat; i++) {
+        if (alatLab[i].id == id) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index != -1) {
+        printf("Masukkan nama alat baru: ");
+        getchar(); // Membersihkan newline
+        fgets(alatLab[index].nama, sizeof(alatLab[index].nama), stdin);
+        alatLab[index].nama[strcspn(alatLab[index].nama, "\n")] = '\0'; // Menghapus newline
+
+        printf("Masukkan merek alat baru: ");
+        fgets(alatLab[index].merek, sizeof(alatLab[index].merek), stdin);
+        alatLab[index].merek[strcspn(alatLab[index].merek, "\n")] = '\0'; // Menghapus newline
+
+        printf("Masukkan model alat baru: ");
+        fgets(alatLab[index].model, sizeof(alatLab[index].model), stdin);
+        alatLab[index].model[strcspn(alatLab[index].model, "\n")] = '\0'; // Menghapus newline
+
+        printf("Masukkan tahun produksi baru: ");
+        scanf("%u", &alatLab[index].tahunProduksi);
+
+        printf("Masukkan jumlah unit baru: ");
+        scanf("%u", &alatLab[index].jumlahUnit);
+
+        alatLab[index].jumlahTersedia = alatLab[index].jumlahUnit;
+        simpanAlat(); // Simpan data alat yang sudah diedit
+        printf("Alat berhasil diedit.\n");
+    } else {
+        printf("Alat dengan ID %u tidak ditemukan.\n", id);
+    }
+}
+
+// Fungsi untuk melihat daftar alat
+void lihatAlat() {
+    printf("Daftar alat yang tersedia:\n");
+    for (int i = 0; i < jumlahAlat; i++) {
