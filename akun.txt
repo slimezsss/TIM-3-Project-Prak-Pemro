@@ -1,0 +1,7 @@
+admin1 trimses
+admin2 tahus
+user1 ayam
+user2 beruang
+user3 cicak
+user4 domba
+user5 elang
