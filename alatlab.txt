@@ -1,0 +1,4 @@
+1|Nuklir Tsar-Bomba|Tsar.King|5.0|2030|9|9
+2|Laptop|Dell|Inspiron|2021|10|10
+3|Beaker|Pyrex|1000ml|2019|20|8
+4|Uranium|KingUra|Ura_5.0|2024|25|15    
